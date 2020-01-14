@@ -1,5 +1,5 @@
 import React from 'react';
-import Platform from 'react-native';
+import Platform, { Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -24,6 +24,14 @@ const defautlStackNavOptions = {
         backgroundColor: Colors.primary
     },
 
+    headerTitleStyle: {
+        fontFamily: 'open-sans-bold'
+    },
+
+    headerBackTitleStyle: {
+        fontFamily: 'open-sans-bol'
+    },
+
     headerTintColor: 'white'
 }
 
@@ -33,6 +41,9 @@ const FiltersNavigator = createStackNavigator(
         Filter: FilterScreen
     },
     {
+        navigationOptions: {
+            drawerLabel: 'The Filters'
+        },
         defaultNavigationOptions: defautlStackNavOptions
     } 
 );
@@ -76,7 +87,8 @@ const tabScreenConfig = {
                             color={tabInfo.tintColor} 
                         />;
             },
-            tabBarColor: Colors.primary
+            tabBarColor: Colors.primary,
+            tabBarLabel: <Text style={{fontFamily: 'open-sans-bold'}} >Meals.</Text>
         }
     },
     Favorites: {
@@ -90,7 +102,8 @@ const tabScreenConfig = {
                             color={tabInfo.tintColor} 
                         />;
             },
-            tabBarColor: Colors.accent
+            tabBarColor: Colors.accent,
+            tabBarLabel: <Text style={{fontFamily: 'open-sans-bold'}} >Favorites.</Text>
         }
     }    
 }
@@ -99,7 +112,10 @@ const androidBottomTabNavigator = createMaterialBottomTabNavigator(
     tabScreenConfig,
     {
         activeTintColor: 'white',
-        shifting: true //provides a way to change the attributes like bckground-color
+        shifting: true, //provides a way to change the attributes like bckground-color
+        barStyle: {
+            backgroundColor: Colors.primary
+        }        
     }
 )
 
@@ -117,12 +133,28 @@ const iosBottomTabNavigator =  createBottomTabNavigator(
 // const MealsFavTabNavigator = (Platform.OS === 'android') ? androidBottomTabNavigator : iosBottomTabNavigator;
 const MealsFavTabNavigator =  androidBottomTabNavigator;
    
-// the high level navigator
-const MainNavigator = createDrawerNavigator({
+// the high level navigator DRAWER
+const MainNavigator = createDrawerNavigator(
+    {
 
-    MealsFav: MealsFavTabNavigator,
-    Filters: FiltersNavigator
-});
+        MealsFav: {
+            screen: MealsFavTabNavigator,
+            navigationOptions: {
+                drawerLabel: 'My Meals!'
+            }
+        },
+
+        Filters: FiltersNavigator
+    }, 
+    {
+        contentOptions: {
+            activeTintColor: Colors.accent,
+            labelStyle: {
+                fontFamily: 'open-sans-bold'
+            }
+        }
+
+    });
 
 
 //a good pattern is wrapping the most important navigator into a container
